@@ -63,7 +63,6 @@ public class main {
 
             System.out.print("Insert path where you want the .xlsx: ");
             output_path = scanner.nextLine();
-            System.out.println();
             System.out.print("Insert name of the .xlsx file: ");
             extension = scanner.nextLine();
             System.out.println();
