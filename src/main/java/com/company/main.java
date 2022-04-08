@@ -69,7 +69,10 @@ public class main {
 
             output_path = output_path + extension + ".xlsx";
 
+            System.out.println(output_path);
+
             output = new FileOutputStream(new File(output_path));
+            //output = new FileOutputStream("efficiencies_proba.xlsx");
 
             System.out.print("Insert L min: ");
             l_min = scanner.nextLine();
@@ -110,12 +113,10 @@ public class main {
                     fileReader = new Scanner(f);
                     fileReader.nextLine();
                     fileReader.nextLine();
-                    //0.61000000
                     quantsPunts = 0;
                     mitja = 0;
                     while (fileReader.hasNextLine()) {
                         aux = fileReader.nextLine();
-                        //System.out.println("AA: " + aux);
                         parts = aux.split("\t");
                         //System.out.println("Part 1: " + Double.parseDouble(parts[0]) + "Part 2: " + Double.parseDouble(parts[1]));
 
@@ -132,9 +133,9 @@ public class main {
                     System.out.printf(": %f\n", mitja);
 
                     cell = row.createCell(j_exc);
-                    j_exc++;
-                    //cell.setCellValue(Double.toString(mitja));
                     cell.setCellValue(df.format(mitja));
+                    j_exc++;
+
 
                     fileReader.close();
                     fileReader = null;
@@ -142,6 +143,7 @@ public class main {
                 }
 
             }
+
             workbook.write(output);
             output.close();
             System.out.println("Correctly saved");
