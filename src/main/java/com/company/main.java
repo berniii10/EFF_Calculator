@@ -38,6 +38,7 @@ public class main {
     static String fc_high;
     static int quantsPunts;
     static double mitja;
+    static int mode;
 
     public static void main(String[] args) throws IOException {
         try {
@@ -55,9 +56,15 @@ public class main {
             quantsPunts = 0;
 
             System.out.println("Welcome to eff calculator. By: Bernat Oller");
-            System.out.println("Files with efficiency must be .txt\n");
 
-            System.out.print("Insert path with all .txt efficiences: ");
+            System.out.print("Insert mode (1 = S11 | 2 = Efficiences): ");
+            mode = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println();
+
+            System.out.println("Files must be .txt\n");
+
+            System.out.print("Insert path with all .txt: ");
             path = scanner.nextLine();
             System.out.println();
 
@@ -86,7 +93,7 @@ public class main {
             w_max = scanner.nextLine();
             System.out.println();
 
-            System.out.print("Extensio al nom del fitxer(final): ");
+            System.out.print("Extension at the end of the file: ");
             extension = scanner.nextLine();
             System.out.println();
 
@@ -111,10 +118,20 @@ public class main {
 
                     f = new File(path + file);
                     fileReader = new Scanner(f);
-                    fileReader.nextLine();
-                    fileReader.nextLine();
+
                     quantsPunts = 0;
-                    mitja = 0;
+                    switch (mode){
+                        case 1:
+                            mitja = -100;
+                            fileReader.nextLine();
+                            //fileReader.nextLine();
+                            break;
+                        case 2:
+                            mitja = 0;
+                            fileReader.nextLine();
+                            fileReader.nextLine();
+                            break;
+                    }
                     while (fileReader.hasNextLine()) {
                         aux = fileReader.nextLine();
                         parts = aux.split("\t");
@@ -123,11 +140,29 @@ public class main {
                         if (Double.parseDouble(parts[0]) >= Double.parseDouble(fc_low) && Double.parseDouble(parts[0]) <= Double.parseDouble(fc_high)) {
                             //System.out.println("Dintre rang: " + parts[0]);
                             //System.out.println("Valor eff: " + parts[1]);
-                            mitja = mitja + Double.parseDouble(parts[1]);
-                            quantsPunts++;
+                            switch (mode){
+                                case 1:
+                                    if (Double.parseDouble(parts[1]) > mitja){
+                                        mitja = Double.parseDouble(parts[1]);
+                                    }
+                                    break;
+                                case 2:
+                                    mitja = mitja + Double.parseDouble(parts[1]);
+                                    quantsPunts++;
+                                    break;
+                            }
+
                         }
                     }
-                    mitja = mitja / quantsPunts;
+                    switch (mode){
+                        case 1:
+
+                            break;
+                        case 2:
+                            mitja = mitja / quantsPunts;
+                            break;
+                    }
+
 
                     System.out.print("PCB " + file);
                     System.out.printf(": %f\n", mitja);
@@ -147,9 +182,11 @@ public class main {
             workbook.write(output);
             output.close();
             System.out.println("Correctly saved");
+            System.out.println("Make sure to convert in the excel from string to number.\n");
+            System.out.println("Thank you!");
 
         } catch (IOException e) {
-            System.out.println("Could not open file. Close it or check the input values.");
+            System.out.println("Could not open file. Close it, check the input values or make sure file " + file + "exists.");
         }
     }
 }
